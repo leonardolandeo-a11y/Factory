@@ -359,7 +359,7 @@ def finanzas_pagar_proveedores(estado):
     """
     return estado
 
-def finanzas_pagar_deuda(estado):
+def finanzas_pagar_deuda(estado: dict):
     """
     2. Pagar deuda:
 
@@ -380,6 +380,20 @@ def finanzas_pagar_deuda(estado):
 
     En cualquier otro caso (deuda = 0 o caja = 0), no se modifica nada.
     """
+    if estado["Caja disponible"] >= 10000 and estado["Deuda pendiente"] >= 10000:
+        estado["Caja disponible"] = estado.get("Caja disponible") - 10000
+        estado["Deuda pendiente"] = estado.get("Caja disponible") - 10000
+    
+    elif estado["Caja disponible"] >= 10000 and estado["Deuda pendiente"] < 10000:
+        estado["Caja disponible"] = estado.get("Caja disponible") - estado["Deuda pendiente"]
+        estado["Deuda pendiente"] = 0
+    
+    elif estado["Caja disponible"] < 10000 and estado["Deuda pendiente"] > 0:
+        pago = estado["Caja disponible"]
+        estado["Deuda pendiente"] = estado.get("Deuda pendiente") - pago
+        estado["Caja disponible"] = 0
+    else:
+        pass
     return estado
 
 def finanzas_solicitar_prestamo(estado):
