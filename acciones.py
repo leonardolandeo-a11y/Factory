@@ -5,7 +5,8 @@
 def produccion_producir(estado):
     """
     1. Producir:
-    - Si existe el flag "Prohibir Produccion" (== True), no produce nada y borra el flag (lo pone a False).
+    - Si existe el flag "Prohibir Produccion" (== True), no produce nada.
+        • Ademas, usted debe implementar algun mecanismo para contar cuantos turnos de la prohibicion van pasando
     - Si no hay prohibicion, cada maquina realiza lo siguiente:
         • Consume 40 000 insumos (resta de “Insumos disponibles”).
           -> solo si Insumos disponibles ≥ 40 000, caso contrario, esa maquina no produce nada
@@ -20,13 +21,14 @@ def produccion_producir(estado):
         • Esto se debe a que los empelados introducen eficiencias en el proceso productivo
     - Todos los turnos se peude producir, es decir, las maquinas no quedan ocupadas.
         • Esto se debe a que el proceso productivo tiene diferentes fases
+    - Si no hay suficientes insumos no se puede producir.
     """
     return estado
 
 def produccion_pedido_encargo(estado):
     """
     2. Producir por encargo:
-    Aceptamso un pedido de produccion para otra fabrica,
+    Aceptamos un pedido de produccion para otra fabrica,
     la cantidad producida no va al invnetario sino que se vende inmediatamente.
     - Se debe controlar que no haya prohibicion y que existan insumos.
     - Si se realiza la produccion por encargo:
@@ -34,6 +36,7 @@ def produccion_pedido_encargo(estado):
         • Consume 10,000 insumos (resta de “Insumos disponibles”).
     - Si no se realiza:
         • No hace nada (no varia ningun campo).
+    - Si no hay suficientes insumos disponibles, no se puede producir por encargo.
     """
     return estado
 
@@ -47,6 +50,7 @@ def produccion_mejorar_proceso(estado):
     - Una vez aumentada la eficiencia, tu decide como hacerla efectiva:
       • En la funcion calcular_estado_final, puedes aumentar la produccion despues de haber producido
       • O puedes modificar la formula de produccion_producir para que las 20,000 unidades a producir aumenten
+    - Esta mejora la hacen los ingneieros de la empresa, por lo que no genera desembolso de la caja.
     """
     return estado
 
@@ -62,14 +66,12 @@ def produccion_mantenimiento_maquinaria(estado):
           el numero de activas aumenta en esa cantidad).
     - Reduce el riesgo de fallas futuras:
         • Fija el flag “MantenimientoHecho = True” para que la proxima carta
-          de caos que dañe maquinas sea cancelada.
+          de caos que dañe maquinas sea cancelada (incluyendo las fallas por mala maniobra del personal).
         • Esta accion bloque por 3 turnos el efecto de cualquier carta del caos que involucre:
           mal funcionamiento, accidentes o siniestros, bajo rendimiento, y afines.
           (siempre y cuando la Carta de Caos guarde relacion con el estado de la maquinaria).
         • Debes implementar un contador en el Estado que indique cuantos turnos quedan de proteccion.
-    - Si no hay dinero, debes decidir que hacer:
-        • Opcion 1: no hacer nada, por falta de fondos
-        • Opcion 2: aumentar la deuda (genera un interes total del 12%)
+    - Este mantenimiento lo realiza el personal de la empresa, por lo que no genera desembolso de la caja.
     """
     return estado
 
@@ -79,9 +81,8 @@ def produccion_comprar_nueva_maquina(estado):
     - Resta S/ 10 000 de “Caja disponible”.
     - Añade 1 al total de maquinas y 1 a maquinas activas:
         • Actualiza “Maquinas (total/activas/dañadas)” en formato “str/str/str”.
-    - Si no hay dinero, debes decidir que hacer:
-        • Opcion 1: no hacer nada, por falta de fondos
-        • Opcion 2: aumentar la deuda (genera intereses)
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, compras la maquina nueva y te haces una deuda de S/ 11,200
     """
     return estado
 
@@ -100,6 +101,7 @@ def rh_contratar_personal_permanente(estado):
     - Aumenta permanentemente S/ 4,000 de “Total Salarios”.
     - Aumenta “Numero de empleados” en 1.
     - Si se vuelve a ejecutar esta accion, se aumentan 4,000 mas en salarios y 1 mas en numero de empleados.
+    - Se puede seguir aumentnto el personal infinitas veces.
     """
     return estado
 
@@ -109,6 +111,8 @@ def rh_contratar_personal_temporal(estado):
     - Paga S/ 10 000 (pago unico unico) para sumar 4 empleados temporales solo este turno.
     - Aumenta la cantidad de empleados en 4, solo por este turno
         • Si deseas, puedes crear una variable adicional para la cantidad de "EmpleadosTemporales"
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, cuentas con los 4 empleados extra por este turno, y te haces una deuda de S/ 11,200
     """
     return estado
 
@@ -118,6 +122,8 @@ def rh_implementar_incentivos(estado):
     - Gasta S/ 5 000 en bonos.
     - Puedes fijar el flag “IncentivosActivos = True” para que, en calcular_estado_final,
       el inventario producido por 5 turnos se multiplique por 1.2 (20 % extra).
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, implementas el incentivo, y te haces una deuda de S/ 5,600
     """
     return estado
 
@@ -125,7 +131,11 @@ def rh_medicion_clima(estado):
     """
     4. Medicion de clima laboral:
     - Sin costo, se hace con el personal interno de la empresa.
-    - Bloquea cartas del caos relacionadas con huelgas o bajo rendimiento de personal por 3 turnos.
+    - Bloquea por 5 turnos cartas del caos relacionadas con huelgas o bajo rendimiento de personal por 3 turnos.
+    - También impide por 5 turnos  que los empleados cometan errores al manipular maquinaria o mercadería.
+    - También impide por 5 turnos  que empleados cometan errores logísticos como etiquetado incorrecto, o diseño de empaque incorrecto.
+    - También bloquea por 5 turnos  cartas del caos relacionadas a la fuga de talento.
+    - En resumen, el buen clima laboral evita errores manuales por 5 turnos.
     """
     return estado
 
@@ -133,7 +143,9 @@ def rh_capacitar_seguridad(estado):
     """
     5. Capacitar en seguridad:
     - Sin costo, la capacitacion la hace el propio personal de la empresa.
-    - Bloquea Cartas del Caos relacionadas a Accidentes.
+    - Bloquea por 3 turnos Cartas del Caos relacionadas a Accidentes.
+    - También impide por 3 turnos cualquier robo interno, debido al aumento en seguridad.
+    - También impide por 3 turnos que los empleados descarguen virus informático por error.
     """
     return estado
 
@@ -145,6 +157,7 @@ def rh_subir_sueldos(estado):
           7% la segunda vez,
           4% la tercera vez,
           1.5%, el resto de veces.
+    - Bloquea por 3 turnos las cartas del caos relacionadas a las huelgas, bajo rendimiento o fuga de talento.
     """
     return estado
 
@@ -168,7 +181,12 @@ def marketing_lanzar_campania(estado):
     - Aumenta nuestras ventas en 20% por dos turnos
       • Solo aumenta si existe inventario disponible para la venta.
       • Es posible vender por encima de los pedidos que teniamos (porque aparece demanda espontanea para este mismo mes).
-    - Bloquea por 5 turnos las cartas del Caos relacionadas baja demanda/aceptacion.
+    - Bloquea por 5 turnos los efectos de las cartas del Caos relacionados a baja demanda, baja aceptacion del producto o cancelación de pedidos.
+        • Los otros efectos de dichas cartas sí se aplicarán
+    - Bloquea por 5 turnos el efecyo de reputación de las cartas del caos que afecten reputación
+        • Los otros efectos de dichas cartas sí se aplicarán
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, lanzas la campaña, y te haces una deuda de S/ 8,960
     """
     return estado
 
@@ -181,9 +199,9 @@ def marketing_invertir_branding(estado):
         • Si la reputacion era mayor a 8, se mantiene en el valor que tenia.
     - Puedes fijar el flag “BrandingActivo = True” para que la demanda base
       suba un 10 % en calcular_estado_final durante estos 5 turnos.
-    - Bloquea por 5 turnos las cartas del Caos relacionadas a la reputacion,
-      excepto si la carta del caos es un problema puntual de branding
-      (es decir, invertimos en branding, pero fue perjudicial).
+    - Bloquea por 5 turnos las cartas del Caos relacionadas a la reputacion.
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, realizas el branding, y te haces una deuda de S/ 13,440
     """
     return estado
 
@@ -193,6 +211,11 @@ def marketing_estudio_mercado(estado):
     - Gasta S/ 5 000 de “Caja disponible”.
     - Ajusta “Reputacion del mercado” a “Nivel 6”.
     - Bloquea las cartas de caos relacionadas con demanda por 5 turnos.
+        • Incluye cancelación de pedidos
+        • No aplica para productos retirados del mercado (defectuosos)
+    - Durante los próximos 3 turnos, la aparición de competidores nuevos no reducirá nuestras ventas.
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, realizas el estudio de mercado, y te haces una deuda de S/ 5,600
     """
     return estado
 
@@ -209,6 +232,8 @@ def marketing_abrir_ecommerce(estado):
     - Si ya existe “EcommerceActivo” True:
         • Gasta S/ 2 000 de “Caja disponible” para mantenimiento, sin aumentar la demanda.
         • Esto bloquea por 3 turnos cualquier Carta del Caos que afecte el e-comerce.
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, te haces una deuda de S/ 22,400 o S/2,240 según corresponda
     """
     return estado
 
@@ -222,6 +247,8 @@ def marketing_co_branding(estado):
       • Esta demanda no es permanente, si no se atiende, el nivel de demanda regres aa su valor
     - Aumenta nuestras ventas en 20% por dos turnos
       (siempre y cuando exista inventario disponible para la venta).
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, realizas la alianza, y te haces una deuda de S/ 3,360
     """
     return estado
 
@@ -241,6 +268,8 @@ def compras_comprar_insumos_nacionales(estado):
     1. Comprar insumos nacionales:
     - Gasta S/ 10 000 de “Caja disponible”.
     - Añade 500,000 a “Insumos disponibles”.
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, compras los insumos, y te haces una deuda de S/ 11,200
     """
     return estado
 
@@ -249,7 +278,8 @@ def compras_comprar_insumos_importados(estado):
     2. Comprar insumos importados:
     - Gasta S/ 14 000 de “Caja disponible”.
     - Añade 800,000 a “Insumos disponibles”.
-    -
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, compras los insumos, y te haces una deuda de S/ 15,680
     """
     return estado
 
@@ -262,6 +292,8 @@ def compras_comprar_insumos_importados_premium(estado):
       • Esto incrementa la demanda en un 20% por 3 meses.
       • Esto incrementa las ventas en un 20% por 3 meses.
         (siempre y cuando exista inventario disponible para la venta).
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, compras los insumos, y te haces una deuda de S/ 28,000
     """
     return estado
 
@@ -283,6 +315,8 @@ def compras_negociar_precio(estado):
     - Permanentemente, todas las compras nacionales costaran el 70% del precio.
     - Puedes fijar un flag “DescuentoCompra = True” o “DescuentoCompra = 0.7”
       •Debes idear la forma de que esto afecte a la funcion compras_comprar_insumos_nacionales.
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, haces la negociación de precios, y te haces una deuda de S/ 5,600
     """
     return estado
 
@@ -295,6 +329,8 @@ def compras_negociar_credito(estado):
     - El efecto es permanente, los insumos que compres, se paga en 90 dias.
     - Debes pensar una estructura de datos que nos permita saber cuantos soles estamos comprando a 90 dias (3 turnos)
       y cuantos turnos le queda a cada cuenta por pagar. Al momento de pagar, el dinero puede salir de caja o aumentar la deuda.
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, haces la negociación al crédito, y te haces una deuda de S/ 2,240.
     """
     return estado
 
@@ -317,7 +353,9 @@ def finanzas_pagar_proveedores(estado):
     Efecto:
     Pagar al contado todas las cuentas por pagar, obteniendo un descuento del 5% por pronto pago.
     - Solo aplica para compra de insumos
-    - Si no tenemos deudas a 90 dias, esta accion no hace nada.
+    - Si no tenemos deudas a 90, 60 o 30 dias, esta accion no hace nada.
+
+    Si no hay dinero, debes pedir un préstamo al 12% de interes equivalente al total del monto a pagar.
     """
     return estado
 
@@ -347,8 +385,9 @@ def finanzas_pagar_deuda(estado):
 def finanzas_solicitar_prestamo(estado):
     """
     3. Solicitar prestamo:
-    - Añade S/ 30 000 a “Caja disponible”.
-    - Añade S/ 35 000 a “Deuda pendiente”.
+    - Pides un préstamo de S/40,000 con un interés del 6%
+    - Añade S/ 40,000 a “Caja disponible”.
+    - Añade S/ 42,400 a “Deuda pendiente”.
     """
     return estado
 
@@ -356,12 +395,16 @@ def finanzas_solicitar_prestamo(estado):
 def finanzas_crear_fondo_emergencia(estado):
     """
     4. Crear fondo de emergencia:
-    - Si “Caja disponible” ≥ 10 000:
-        • Resta 10 000 de “Caja disponible”.
+    - Si “Caja disponible” ≥ 50 000:
+        • Resta 50 000 de “Caja disponible”.
         • Fija el flag “Fondo emergencia = True”.
     - En otro caso, retorna sin cambios.
     - Debe simplementar una variable que represente tener un fondo de emergencia.
     - Esta accion bloquea diversas Cartas del Caos que involcuren gastos inesperaods (sin importar su costo)
+        • Inclye el precio de mercadería perdida por robo, accidentes o siniestros
+        • Incluye gastos logísticos por productos retirados del mercado o logística inversa.
+    - Si no hay dinero, debes pedir un préstamo al 12% de interes
+        • Es decir, adquieres el fondo de emergencia, y te haces una deuda de S/ 56,000
     """
     return estado
 
