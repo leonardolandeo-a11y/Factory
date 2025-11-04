@@ -63,6 +63,7 @@ boton_cambiar     = pygame.Rect(0, 0, 140, 40)
 boton_tomar_carta = pygame.Rect(SCREEN_WIDTH // 2 - 70, SCREEN_HEIGHT - 60, 140, 40)
 boton_estado      = pygame.Rect(30, SCREEN_HEIGHT - 60, 260, 40)
 
+
 # ------------------------- Variables de control y estado -------------------------
 current_area       = 1
 estado_empresa     = estado.calcular_estado_inicial()
@@ -359,6 +360,7 @@ while running:
                     estado_empresa       = cartas.aplicar_carta(num, estado_empresa)
                     mostrando_input_carta = False
                     mostrando_evento     = True
+                    estado_empresa["Meses"] +=1
                     # NO limpiamos input_text_carta aqui
 
             else:

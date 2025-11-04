@@ -21,7 +21,10 @@ def calcular_estado_inicial():
         "Reputacion del mercado":            "Nivel 3",
         "Multas e indemnizaciones":          0,
         "Maquinas (total/activas/dañadas)":  "5/5/0",
-
+        
+         # Meses Pasados
+         "Meses" : 0,
+                  
         # Banderas de prohibicion y seguro
         "Prohibir Produccion":               False,
         "Prohibir Compras":                  False,
