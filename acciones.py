@@ -416,9 +416,9 @@ def finanzas_pagar_deuda(estado: dict):
         print("Pagamos la deuda exitosamente 2")
     
     elif estado["Caja disponible"] < 10000 and estado["Deuda pendiente"] > 0:
-        pago = estado["Caja disponible"]
-        estado["Deuda pendiente"] = max(estado["Deuda pendiente"] - pago, 0)
-        estado["Caja disponible"] = 0
+        pago = min(estado["Caja disponible"], estado["Deuda pendiente"])
+        estado["Deuda pendiente"] -= pago
+        estado["Caja disponible"] -= pago
         print("Pagamos la deuda exitosamente 3")
         
     elif estado["Caja disponible"]  == 0 and estado["Deuda pendiente"] > 0:
