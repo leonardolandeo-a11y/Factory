@@ -306,6 +306,8 @@ def compras_vender_excedentes_insumos(estado):
       pero los vendemos a 0.30 centimos cada uno.
     La accion se ejecuta por 3 turnos, incluido este.
     """
+    #Inicio el contador una vez se ejecute la acción, 3 turnos, contando este mismo.
+    estado["VentaExcedentesActivos"] = 4
     return estado
 
 def compras_negociar_precio(estado):
