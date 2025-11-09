@@ -137,6 +137,8 @@ def rh_medicion_clima(estado):
     - También bloquea por 5 turnos  cartas del caos relacionadas a la fuga de talento.
     - En resumen, el buen clima laboral evita errores manuales por 5 turnos.
     """
+    estado["AmbienteLaboralFavorableTiempo"] = 6
+    estado["AmbienteLaboralFavorable"] = True
     return estado
 
 def rh_capacitar_seguridad(estado):
@@ -310,6 +312,7 @@ def compras_vender_excedentes_insumos(estado):
     estado["VentaExcedentesActivos"] = 4
     return estado
 
+
 def compras_negociar_precio(estado):
     """
     5. Negociar precio con proveedores:
@@ -359,6 +362,26 @@ def finanzas_pagar_proveedores(estado):
 
     Si no hay dinero, debes pedir un préstamo al 12% de interes equivalente al total del monto a pagar.
     """
+    deuda = estado["Deuda pendiente"]
+    caja = estado["Caja disponible"]
+
+
+    if deuda == 0 :
+        return estado
+
+    deuda_con_descuento = deuda*0.95
+
+    if caja >= deuda_con_descuento:
+        estado["Caja disponible"] = caja - deuda_con_descuento
+        estado['Deuda pendiente'] =  0
+
+    else :
+        faltante = deuda_con_descuento - caja
+        prestamo = faltante*1.12
+
+        estado["Caja disponible"] = 0
+        estado['Deuda pendiente'] = prestamo
+    
     return estado
 
 def finanzas_pagar_deuda(estado: dict):

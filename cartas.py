@@ -101,10 +101,14 @@ def aplicar_carta(numero: int , estado : dict):
     #   - Pierdes 1 maquina activa (pasa a dañada).
     #   - Pierdes 1 empleado.
     elif numero == 8:
-        Maquinas = estado["Maquinas (total/activas/dañadas)"].split("/")
-        Maquinas[1] -= 1
-        Maquinas[2] +=1
-        estado["Maquinas (total/activas/dañadas)"] = f"{Maquinas[0]}/{Maquinas[1]}/{Maquinas[2]}"
+        if estado["AmbienteLaboralFavorable"] == True:
+            print("Se evito la fuga de talento por el excelente ambiente laboral")
+            pass
+        else:
+            Maquinas = estado["Maquinas (total/activas/dañadas)"].split("/")
+            Maquinas[1] -= 1
+            Maquinas[2] +=1
+            estado["Maquinas (total/activas/dañadas)"] = f"{Maquinas[0]}/{Maquinas[1]}/{Maquinas[2]}"
         return estado
 
 
@@ -114,6 +118,14 @@ def aplicar_carta(numero: int , estado : dict):
     #   - Los clientes se enteran de la huelga y baja la reputación 3 niveles
     # Duración: 2 turnos
     elif numero == 9:
+        if estado["AmbienteLaboralFavorable"]== True:
+            #Sin Huelgas
+            print("Ambiente favorable no hay huelgas")
+            pass
+        
+        else:
+            #Futuro Codigo Huelgas
+            pass
         return estado
 
 
@@ -160,6 +172,12 @@ def aplicar_carta(numero: int , estado : dict):
     #     • Además, gastas 15,000 soles en la logística inversa
     # Duración: 3 turnos
     elif numero == 13:
+        if estado["AmbienteLaboralFavorable"] == True:
+            print("Existe un ambiente laboral favorable y se evitaron los errores de etiquetado")
+            pass
+        else:
+            #Futuro Codigo Error etiquetado empleados
+            pass
         return estado
 
 
