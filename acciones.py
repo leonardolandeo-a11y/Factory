@@ -408,16 +408,28 @@ def finanzas_pagar_deuda(estado: dict):
     if estado["Caja disponible"] >= 10000 and estado["Deuda pendiente"] >= 10000:
         estado["Caja disponible"] = estado["Caja disponible"] - 10000
         estado["Deuda pendiente"] = estado["Deuda pendiente"] - 10000
+        print("Pagamos la deuda exitosamente 1")
     
     elif estado["Caja disponible"] >= 10000 and estado["Deuda pendiente"] < 10000:
         estado["Caja disponible"] = estado["Caja disponible"] - estado["Deuda pendiente"]
         estado["Deuda pendiente"] = 0
+        print("Pagamos la deuda exitosamente 2")
     
     elif estado["Caja disponible"] < 10000 and estado["Deuda pendiente"] > 0:
         pago = estado["Caja disponible"]
-        estado["Deuda pendiente"] = estado["Deuda pendiente"] - pago
+        estado["Deuda pendiente"] = max(estado["Deuda pendiente"] - pago, 0)
         estado["Caja disponible"] = 0
+        print("Pagamos la deuda exitosamente 3")
+        
+    elif estado["Caja disponible"]  == 0 and estado["Deuda pendiente"] > 0:
+        print("No contamos con el suficiente dinero para pagar la deuda")
+        pass
+    elif estado["Deuda pendiente"] == 0:
+        print("No tenemos deuda")
+        pass
+    
     else:
+        print("No se cumplen con los requisitos para pagar la deuda")
         pass
     return estado
 
