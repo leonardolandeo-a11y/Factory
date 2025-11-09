@@ -128,25 +128,7 @@ def calcular_estado_final(estado):
 
     # 7) Actualizacion de flags temporales y decremento de contadores
     estado["TurnosProduccionExtra"] = estado["TurnosProduccionExtra"]
-<<<<<<< HEAD
-    #Contador atrás basado en la acción creada
-    if estado["VentaExcedentesActivos"] > 0:
-        estado["VentaExcedentesActivos"] -= 1
 
-    # 8) Perdida de inventario:
-    estado["Inventario"]            = estado["Inventario"]
-    #Si no hubo cambios..
-    if estado["Inventario"] == estado["InventarioMesAnterior"]:
-        cuantosvende = estado["Insumos disponibles"] * 0.10
-        if estado["VentaExcedentesActivos"] > 0:
-            preciov = cuantosvende * 0.30
-            estado["Caja disponible"] += preciov
-            estado["Insumos disponibles"]-=cuantosvende
-        else:
-            estado["Insumos disponibles"] -= cuantosvende
-
-
-=======
     
     # 8) Perdida de inventario:
     estado["Inventario"]= estado["Inventario"]
@@ -173,6 +155,5 @@ def calcular_estado_final(estado):
          estado["AmbienteLaboralFavorableTiempo"] -=1
       else:
          estado["AmbienteLaboralFavorable"] = False
->>>>>>> 96a66ce (Se arreglaron los errores; ademas, se terminaron las acciones de recursos humanos y la de pagar deuda)
     return estado
  
