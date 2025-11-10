@@ -128,26 +128,29 @@ def calcular_estado_final(estado):
 
     # 7) Actualizacion de flags temporales y decremento de contadores
     estado["TurnosProduccionExtra"] = estado["TurnosProduccionExtra"]
+    if "VentaExcedentesActivos" in estado:
+      if estado["VentaExcedentesActivos"] > 0:
+         estado["VentaExcedentesActivos"] -= 1
 
     
     # 8) Perdida de inventario:
     estado["Inventario"]= estado["Inventario"]
-      
    
     #Contador atrás basado en la acción creada (compras_vender_excedentes_insumos) --Marco--
-    if "VentaExcedentesActivos" in estado:
-      if estado["VentaExcedentesActivos"] > 0:
-         estado["VentaExcedentesActivos"] -= 1
-      
          #Si no hubo cambios..
          if estado["Inventario"] == estado["InventarioMesAnterior"]:
-            cuantosvende = estado["Insumos disponibles"] * 0.10
-            if estado["VentaExcedentesActivos"] > 0:
-               preciov = cuantosvende * 0.30
-               estado["Caja disponible"] += preciov
-               estado["Insumos disponibles"]-=cuantosvende
-            else:
-               estado["Insumos disponibles"] -= cuantosvende
+            cuantoscaducan = max(1,int(estado["Insumos disponibles"] * 0.10)) if estado["Insumos disponibles"]>0 else 0
+             if estado.get("Insumos disponibles", 0)>=10:
+                if "VentaExcedentesActivos" in estado:
+                    if estado["VentaExcedentesActivos"] > 0:
+                       preciov = cuantoscaducan * 0.30
+                       estado["Caja disponible"] += preciov
+                else:
+                    estado["VentaExcedentesActivos"] = 0
+            estado["Insumos disponibles"]-=cuantoscaducan
+            if estado["Insumos disponibles"]< 0:
+                estado["Insumos disponibles"]=0
+
       
    #Codigo Iker Ambiente laboral Faborable (rh_medicion_clima)
     if "AmbienteLaboralFavorableTiempo" in estado and "AmbienteLaboralFavorable" in estado:
