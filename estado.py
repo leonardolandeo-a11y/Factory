@@ -138,24 +138,27 @@ def calcular_estado_final(estado):
    
     #Contador atrás basado en la acción creada (compras_vender_excedentes_insumos) --Marco--
          #Si no hubo cambios..
-         if estado["Inventario"] == estado["InventarioMesAnterior"]:
-            cuantoscaducan = max(1,int(estado["Insumos disponibles"] * 0.10)) if estado["Insumos disponibles"]>0 else 0
-             if estado.get("Insumos disponibles", 0)>=10:
-                if "VentaExcedentesActivos" in estado:
-                    if estado["VentaExcedentesActivos"] > 0:
-                       preciov = cuantoscaducan * 0.30
-                       estado["Caja disponible"] += preciov
-                else:
-                    estado["VentaExcedentesActivos"] = 0
-            estado["Insumos disponibles"]-=cuantoscaducan
-            if estado["Insumos disponibles"]< 0:
-                estado["Insumos disponibles"]=0
+    if estado["Inventario"] == estado["InventarioMesAnterior"]:
+      cuantoscaducan = max(1,int(estado["Insumos disponibles"] * 0.10)) if estado["Insumos disponibles"]>0 else 0
+      if estado.get("Insumos disponibles", 0)>=10:
+         if "VentaExcedentesActivos" in estado:
+            if estado["VentaExcedentesActivos"] > 0:
+               preciov = cuantoscaducan * 0.30
+               estado["Caja disponible"] += preciov
+      else:
+         estado["VentaExcedentesActivos"] = 0
+      estado["Insumos disponibles"]-=cuantoscaducan
+      if estado["Insumos disponibles"]< 0:
+         estado["Insumos disponibles"]=0
 
       
    #Codigo Iker Ambiente laboral Faborable (rh_medicion_clima)
     if "AmbienteLaboralFavorableTiempo" in estado and "AmbienteLaboralFavorable" in estado:
       if estado["AmbienteLaboralFavorableTiempo"] > 0:
-         estado["AmbienteLaboralFavorableTiempo"] -=1
+         estado["AmbienteLaboralFavorableTiempo"] -= 1
+         for key in ["Huelgas", "BajoRendimiento", "ErroresEmpleados", "ErroresLogísticos", "FugasDeTalento"]:
+          if key in estado and estado[key] > 0:
+            estado[key] -= 1
       else:
          estado["AmbienteLaboralFavorable"] = False
     return estado

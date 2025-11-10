@@ -137,8 +137,13 @@ def rh_medicion_clima(estado):
     - También bloquea por 5 turnos  cartas del caos relacionadas a la fuga de talento.
     - En resumen, el buen clima laboral evita errores manuales por 5 turnos.
     """
-    estado["AmbienteLaboralFavorableTiempo"] = 6
     estado["AmbienteLaboralFavorable"] = True
+    estado["AmbienteLaboralFavorableTiempo"] = 6
+    estado["Huelgas"] = 5
+    estado["BajoRendimiento"] = 3
+    estado["ErroresEmpleados"] = 5
+    estado["ErroresLogísticos"] = 5
+    estado["FugasDeTalento"] = 5
     return estado
 
 def rh_capacitar_seguridad(estado):
@@ -405,7 +410,13 @@ def finanzas_pagar_deuda(estado: dict):
 
     En cualquier otro caso (deuda = 0 o caja = 0), no se modifica nada.
     """
-    if estado["Caja disponible"] >= 10000 and estado["Deuda pendiente"] >= 10000:
+    if estado["Deuda pendiente"] == 0:
+        print("No tenemos deuda")
+        pass
+    elif estado["Caja disponible"]  == 0 and estado["Deuda pendiente"] > 0:
+        print("No contamos con el suficiente dinero para pagar la deuda")
+        pass
+    elif estado["Caja disponible"] >= 10000 and estado["Deuda pendiente"] >= 10000:
         estado["Caja disponible"] = estado["Caja disponible"] - 10000
         estado["Deuda pendiente"] = estado["Deuda pendiente"] - 10000
         print("Pagamos la deuda exitosamente 1")
@@ -420,14 +431,6 @@ def finanzas_pagar_deuda(estado: dict):
         estado["Deuda pendiente"] -= pago
         estado["Caja disponible"] -= pago
         print("Pagamos la deuda exitosamente 3")
-        
-    elif estado["Caja disponible"]  == 0 and estado["Deuda pendiente"] > 0:
-        print("No contamos con el suficiente dinero para pagar la deuda")
-        pass
-    elif estado["Deuda pendiente"] == 0:
-        print("No tenemos deuda")
-        pass
-    
     else:
         print("No se cumplen con los requisitos para pagar la deuda")
         pass
