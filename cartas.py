@@ -81,7 +81,7 @@ def aplicar_carta(numero: int , estado : dict):
     # Duración: 2 turnos
     elif numero == 6:
         Nivel = estado["Reputacion del mercado"].split(" ")
-        Nivel[1] -= 2
+        estado["Reputacion del mercado"] = f"Nivel {int(Nivel[1]) -2}"
         
         return estado
 
