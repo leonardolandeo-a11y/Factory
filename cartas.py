@@ -69,8 +69,7 @@ def aplicar_carta(numero: int , estado : dict):
     elif numero == 5:
         estado["Multas e indemnizaciones"] += 5000
         Nivel = estado["Reputacion del mercado"].split(" ")
-        Nivel[1] -= 1
-        estado["Reputacion del mercado"] = f"Nivel {Nivel[1]}"
+        estado["Reputacion del mercado"] = f"Nivel {int(Nivel[1]) -1}"
         return estado
 
 
