@@ -410,6 +410,7 @@ def finanzas_pagar_deuda(estado: dict):
 
     En cualquier otro caso (deuda = 0 o caja = 0), no se modifica nada.
     """
+    
     if estado["Deuda pendiente"] == 0:
         print("No tenemos deuda")
         pass

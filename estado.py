@@ -151,15 +151,15 @@ def calcular_estado_final(estado):
       if estado["Insumos disponibles"]< 0:
          estado["Insumos disponibles"]=0
 
-      
+   
    #Codigo Iker Ambiente laboral Faborable (rh_medicion_clima)
     if "AmbienteLaboralFavorableTiempo" in estado and "AmbienteLaboralFavorable" in estado:
       if estado["AmbienteLaboralFavorableTiempo"] > 0:
          estado["AmbienteLaboralFavorableTiempo"] -= 1
          for key in ["Huelgas", "BajoRendimiento", "ErroresEmpleados", "ErroresLogísticos", "FugasDeTalento"]:
-          if key in estado and estado[key] > 0:
-            estado[key] -= 1
-      else:
+            if key in estado and estado[key] > 0:
+               estado[key] -= 1
+      elif estado["AmbienteLaboralFavorableTiempo"] == 0:
          estado["AmbienteLaboralFavorable"] = False
     return estado
  

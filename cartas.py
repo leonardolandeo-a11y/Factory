@@ -100,9 +100,10 @@ def aplicar_carta(numero: int , estado : dict):
     #   - Pierdes 1 maquina activa (pasa a dañada).
     #   - Pierdes 1 empleado.
     elif numero == 8:
-        if estado["AmbienteLaboralFavorable"] == True:
-            print("Se evito la fuga de talento por el excelente ambiente laboral")
-            pass
+        if "AmbienteLaboralFavorable" in estado:
+            if estado["AmbienteLaboralFavorable"] == True:
+                print("Se evito la fuga de talento por el excelente ambiente laboral")
+                pass
         else:
             Maquinas = estado["Maquinas (total/activas/dañadas)"].split("/")
             Maquinas[1] -= 1
@@ -117,11 +118,11 @@ def aplicar_carta(numero: int , estado : dict):
     #   - Los clientes se enteran de la huelga y baja la reputación 3 niveles
     # Duración: 2 turnos
     elif numero == 9:
-        if estado["AmbienteLaboralFavorable"]== True:
-            #Sin Huelgas
-            print("Ambiente favorable no hay huelgas")
-            pass
-        
+        if "AmbienteLaboralFavorable" in estado:
+            if estado["AmbienteLaboralFavorable"]== True:
+                #Sin Huelgas
+                print("Ambiente favorable no hay huelgas")
+                pass
         else:
             #Futuro Codigo Huelgas
             pass
@@ -171,9 +172,10 @@ def aplicar_carta(numero: int , estado : dict):
     #     • Además, gastas 15,000 soles en la logística inversa
     # Duración: 3 turnos
     elif numero == 13:
-        if estado["AmbienteLaboralFavorable"] == True:
-            print("Existe un ambiente laboral favorable y se evitaron los errores de etiquetado")
-            pass
+        if "AmbienteLaboralFavorable" in estado:
+            if estado["AmbienteLaboralFavorable"] == True:
+                print("Existe un ambiente laboral favorable y se evitaron los errores de etiquetado")
+                pass
         else:
             #Futuro Codigo Error etiquetado empleados
             pass
@@ -188,20 +190,34 @@ def aplicar_carta(numero: int , estado : dict):
 
 
 
+    #Falta
     # Carta 15: Proveedores en huelga
     #   - Prohibir compras nacionales las siguientes 4 rondas:
     elif numero == 15:
         return estado
 
+    #Terminado
     # Carta 16: Estafa financiera
     #   - Pierdes 8,000 de caja
     elif numero == 16:
+        Resto = estado["Caja disponible"] - 8000
+        
+        if Resto <= 0:
+            estado["Caja disponible"] = 0
+            
         return estado
 
+    #Terminado
     # Carta 17: Rumor de corrupcion
     #   - Reputacion del mercado −2 niveles.
     elif numero == 17:
+        Nivel = estado["Reputacion del mercado"].split(" ")
+        Nivel[1] = int(Nivel[1]) - 2
+        if int(Nivel[1]) <= 0:
+            Nivel[1] = 0
+        estado["Reputacion del mercado"] = f"Nivel {Nivel[1]}"
         return estado
+
 
     # Carta 18: Plaga en planta
     #   - Produccion a la mitad este turno
@@ -209,14 +225,26 @@ def aplicar_carta(numero: int , estado : dict):
     elif numero == 18:
         return estado
 
+    #Terminado
     # Carta 19: Cliente corproativo VIP cancela pedido
     #   - Peirdes un tercio de los “Pedidos por atender”.
     elif numero == 19:
+        if estado["Pedidos por atender"] <= 0:
+            estado["Pedidos por atender"] = 0
+        else:
+            Tercio = int(estado["Pedidos por atender"]* (1/3))
+            estado["Pedidos por atender"] = estado["Pedidos por atender"] - Tercio
         return estado
 
+    #Terminada
     # Carta 20: Producto defectuoso viral
     #   - Reputacion del mercado −3 niveles.
     elif numero == 20:
+        Nivel = estado["Reputacion del mercado"].split(" ")
+        Nivel[1] = int(Nivel[1]) - 3
+        if int(Nivel[1]) <= 0:
+            Nivel[1] = 0
+        estado["Reputacion del mercado"] = f"Nivel {int(Nivel[1])}"
         return estado
 
     # Carta 21: Mal clima: inundacion
@@ -231,9 +259,15 @@ def aplicar_carta(numero: int , estado : dict):
     elif numero == 22:
         return estado
 
+    #Terminado
     # Carta 23: Fake news en redes
     #   - Reputacion del mercado −2 niveles.
     elif numero == 23:
+        Nivel = estado["Reputacion del mercado"].split(" ")
+        Nivel[1] = int(Nivel[1]) - 2
+        if int(Nivel[1]) <= 0:
+            Nivel[1] = 0
+        estado["Reputacion del mercado"] = f"Nivel {Nivel[1]}"
         return estado
 
     # Carta 24: Bloqueo logistico
@@ -242,9 +276,11 @@ def aplicar_carta(numero: int , estado : dict):
     elif numero == 24:
         return estado
 
+    #Terminado
     # Carta 25: Demanda judicial
     #   - Multas e indemnizaciones +15,000.
     elif numero == 25:
+        estado["Multas e indemnizaciones"] += 15000
         return estado
 
     # Carta 26: Nuevo competidor agresivo
@@ -258,6 +294,7 @@ def aplicar_carta(numero: int , estado : dict):
     # Carta 27: Robo interno
     #   - Caja se reduce en 10,000.
     elif numero == 27:
+        
         return estado
 
     # Carta 28: Crisis economica
