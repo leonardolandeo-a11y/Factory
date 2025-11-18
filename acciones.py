@@ -138,7 +138,7 @@ def rh_medicion_clima(estado):
     - En resumen, el buen clima laboral evita errores manuales por 5 turnos.
     """
     estado["AmbienteLaboralFavorable"] = True
-    estado["AmbienteLaboralFavorableTiempo"] = 6
+    estado["AmbienteLaboralFavorableTiempo"] = 5
     estado["Huelgas"] = 5
     estado["BajoRendimiento"] = 3
     estado["ErroresEmpleados"] = 5

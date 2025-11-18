@@ -196,7 +196,7 @@ def aplicar_carta(numero: int , estado : dict):
     elif numero == 15:
         return estado
 
-    #Terminado
+    #Falta
     # Carta 16: Estafa financiera
     #   - Pierdes 8,000 de caja
     elif numero == 16:
