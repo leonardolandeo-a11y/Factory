@@ -140,7 +140,7 @@ def calcular_estado_final(estado):
          #Si no hubo cambios..
     if estado["Inventario"] == estado["InventarioMesAnterior"]:
       cuantoscaducan = max(1,int(estado["Insumos disponibles"] * 0.10)) if estado["Insumos disponibles"]>0 else 0
-      if estado.get("Insumos disponibles", 0)>=10:
+      if estado["Insumos disponibles"]>=10:
          if "VentaExcedentesActivos" in estado:
             if estado["VentaExcedentesActivos"] > 0:
                preciov = cuantoscaducan * 0.30
